@@ -1,12 +1,17 @@
 name: CI/CD pipeline
-on: push
+on:
+  push:
+    branches:
+      - master
+  release:
+    types: [published, prereleased]
 
 jobs:
-  build-n-publish:
-    name: 🔨 Build and 📦 publish distribution to TestPyPI & PyPI
-    runs-on: ubuntu-18.04
+  build:
+    name: 🔨 Build distribution
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - name: 🏗 Set up Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -17,13 +22,40 @@ jobs:
       - name: 🔨 Build a binary wheel and a source tarball
         run: >-
           python setup.py sdist bdist_wheel
-      - name: 📦 Publish to TestPyPI
+      - name: ⬆ Upload build result
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist
+          path: dist
+
+  publish-on-testpypi:
+    name: 📦 Publish on TestPyPI
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇ Download build result
+        uses: actions/download-artifact@v1
+        with:
+          name: dist
+          path: dist
+      - name: 📦 Publish to index
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.testpypi_password }}
           repository_url: https://test.pypi.org/legacy/
-      - name: 📦 Publish tagged releases to PyPI
-        if: startsWith(github.event.ref, 'refs/tags')
+
+  publish-on-pypi:
+    name: 📦 Publish tagged releases to PyPI
+    if: startsWith(github.event.ref, 'refs/tags')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇ Download build result
+        uses: actions/download-artifact@v1
+        with:
+          name: dist
+          path: dist
+      - name: 📦 Publish to index
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.pypi_password }}
