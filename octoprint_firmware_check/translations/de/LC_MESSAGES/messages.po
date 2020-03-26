@@ -1,0 +1,79 @@
+# German translations for OctoPrint-FirmwareCheck.
+# Copyright (C) 2020 The OctoPrint Project
+# This file is distributed under the same license as the
+# OctoPrint-FirmwareCheck project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OctoPrint-FirmwareCheck 2020.3.25\n"
+"Report-Msgid-Bugs-To: i18n@octoprint.org\n"
+"POT-Creation-Date: 2020-03-26 15:36+0100\n"
+"PO-Revision-Date: 2020-03-26 15:30+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+#: octoprint_firmware_check/__init__.py:52
+msgid "Attention!"
+msgstr "Achtung!"
+
+#: octoprint_firmware_check/__init__.py:110
+msgid "Allows to see firmware check warnings"
+msgstr "Erlaubt die Anzeige von Firmwarecheckwarnungen"
+
+#: octoprint_firmware_check/__init__.py:202
+msgid ""
+"Without this plugin OctoPrint will no longer be able to check if the "
+"printer it is connected to has a known safety issue or otherwise broken "
+"firmware and inform you about that fact."
+msgstr ""
+"Ohne dieses Plugin wird OctoPrint nicht länger in der Lage sein, dich "
+"über bekannte Sicherheitsprobleme oder andere Probleme mit der Firmware "
+"deines Druckers zu informieren."
+
+#: octoprint_firmware_check/checks/firmware_broken.py:14
+msgid ""
+"Your printer's firmware is known to have a broken implementation of the "
+"communication protocol. This will cause print failures. You'll need to "
+"take additional steps for OctoPrint to work with it."
+msgstr ""
+"Die Firmware deines Druckers is bekannt dafür, eine defekte "
+"Implementierung des Kommunikationsprotokolls zu haben. Das wird "
+"fehlerhafte Druckjobs verursachen. Du musst zusätzliche Schritte "
+"durchführen, damit OctoPrint damit arbeiten kann."
+
+#: octoprint_firmware_check/checks/firmware_unsafe.py:17
+msgid ""
+"Your printer's firmware is known to lack mandatory safety features (e.g. "
+"thermal runaway protection). This is a fire risk."
+msgstr ""
+"Die Firmware deines Druckers ist bekannt dafür, obligatorische "
+"Sicherheitsfunktionen deaktiviert zu haben (z.B. Thermal Runaway "
+"Protection). Das ist ein Brandrisiko."
+
+#: octoprint_firmware_check/static/js/firmware_check.js:64
+msgid "Critical Warning: Firmware Unsafe"
+msgstr "Kritische Warnung: Unsichere Firmware"
+
+#: octoprint_firmware_check/static/js/firmware_check.js:65
+msgid "Warning: Firmware Broken"
+msgstr "Warnung: Defekte Firmware"
+
+#: octoprint_firmware_check/static/js/firmware_check.js:66
+msgid "Critical Warning"
+msgstr "Kritische Warnung"
+
+#: octoprint_firmware_check/static/js/firmware_check.js:66
+msgid "Warning"
+msgstr "Warnung"
+
+#: octoprint_firmware_check/templates/firmware_check_sidebar.jinja2:5
+msgid "Learn more..."
+msgstr "Mehr erfahren..."
+
