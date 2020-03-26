@@ -51,16 +51,6 @@ plugin_additional_packages = []
 # Any python packages within <plugin_package>.* you do NOT want to install with your plugin
 plugin_ignored_packages = []
 
-# Additional parameters for the call to setuptools.setup. If your plugin wants to register additional entry points,
-# define dependency links or other things like that, this is the place to go. Will be merged recursively with the
-# default setup parameters as provided by octoprint_setuptools.create_plugin_setup_parameters using
-# octoprint.util.dict_merge.
-#
-# Example:
-#     plugin_requires = ["someDependency==dev"]
-#     additional_setup_parameters = {"dependency_links": ["https://github.com/someUser/someRepo/archive/master.zip#egg=someDependency-dev"]}
-additional_setup_parameters = {}
-
 ########################################################################################################################
 
 from setuptools import setup
@@ -626,6 +616,13 @@ def create_plugin_setup_parameters(identifier="todo", name="TODO", version="0.1"
 		}
 	)
 
+def read_file_contents(path):
+	import codecs
+	with codecs.open(path, encoding="utf-8") as f:
+		return f.read()
+
+here = os.path.abspath(os.path.dirname(__file__))
+
 setup_parameters = create_plugin_setup_parameters(
 	identifier=plugin_identifier,
 	package=plugin_package,
@@ -642,8 +639,7 @@ setup_parameters = create_plugin_setup_parameters(
 	additional_data=plugin_additional_data
 )
 
-if len(additional_setup_parameters):
-	from octoprint.util import dict_merge
-	setup_parameters = dict_merge(setup_parameters, additional_setup_parameters)
+setup_parameters["long_description"] = read_file_contents(os.path.join(here, "README.md"))
+setup_parameters["long_description_content_type"] = "text/markdown"
 
 setup(**setup_parameters)
