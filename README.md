@@ -4,7 +4,7 @@ The Firmware Check plugin tries to identify printers or rather printer firmware 
 disabled thermal runaway protection, or other kinds of severe issues, like known communication crippling bugs, and
 displays a warning box to logged in users on identification of such a firmware.
 
-![Screenshot](extras/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/OctoPrint/OctoPrint-FirmwareCheck/master/extras/screenshot.png)
 
 It was formerly called "Printer Safety Check" and used to be bundled with OctoPrint since version
 1.3.7. It was unbundled in 1.4.1 and turned into an install dependency to allow for a separate release cycle. It is
