@@ -30,6 +30,7 @@ jobs:
 
   publish-on-testpypi:
     name: 📦 Publish on TestPyPI
+    if: github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -40,13 +41,14 @@ jobs:
           path: dist
       - name: 📦 Publish to index
         uses: pypa/gh-action-pypi-publish@master
+        continue-on-error: true
         with:
           password: ${{ secrets.testpypi_password }}
           repository_url: https://test.pypi.org/legacy/
 
   publish-on-pypi:
     name: 📦 Publish tagged releases to PyPI
-    if: startsWith(github.event.ref, 'refs/tags')
+    if: github.event_name == 'release'
     needs: build
     runs-on: ubuntu-latest
     steps:

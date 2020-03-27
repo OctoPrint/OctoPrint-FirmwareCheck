@@ -14,7 +14,7 @@ plugin_package = "octoprint_firmware_check"
 plugin_name = "OctoPrint-FirmwareCheck"
 
 # The plugin's version. Can be overwritten within OctoPrint's internal data via __plugin_version__ in the plugin module
-plugin_version = "2020.03.26"
+plugin_version = "2020.03.27"
 
 # The plugin's description. Can be overwritten within OctoPrint's internal data via __plugin_description__ in the plugin
 # module
