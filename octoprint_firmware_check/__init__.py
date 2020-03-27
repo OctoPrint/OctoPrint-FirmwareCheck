@@ -112,6 +112,25 @@ class FirmwareCheckPlugin(octoprint.plugin.AssetPlugin,
 			     default_groups=[USER_GROUP])
 		]
 
+	##~~ Softwareupdate hook
+
+	def get_update_information(self):
+		return dict(
+			fixcbdfirmware=dict(
+				displayName="Firmware Check Plugin",
+				displayVersion=self._plugin_version,
+
+				# version check: github repository
+				type="github_release",
+				user="OctoPrint",
+				repo="OctoPrint-FirmwareCheck",
+				current=self._plugin_version,
+
+				# update method: pip
+				pip="https://github.com/OctoPrint/OctoPrint-FirmwareCheck/archive/{target_version}.zip"
+			)
+		)
+
 	##~~ Helpers
 
 	def _run_checks(self, check_type, *args, **kwargs):
@@ -204,6 +223,7 @@ __plugin_disabling_discouraged__ = gettext("Without this plugin OctoPrint will n
                                            "issue or otherwise broken firmware and inform you about that fact.")
 __plugin_implementation__ = FirmwareCheckPlugin()
 __plugin_hooks__ = {
+	"octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
 	"octoprint.comm.protocol.gcode.received": (__plugin_implementation__.on_gcode_received, 100),
 	"octoprint.comm.protocol.firmware.info": (__plugin_implementation__.on_firmware_info_received, 100),
 	"octoprint.comm.protocol.firmware.capabilities": (__plugin_implementation__.on_firmware_cap_received, 100),
