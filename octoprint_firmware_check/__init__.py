@@ -116,7 +116,7 @@ class FirmwareCheckPlugin(octoprint.plugin.AssetPlugin,
 
 	def get_update_information(self):
 		return dict(
-			fixcbdfirmware=dict(
+			firmware_check=dict(
 				displayName="Firmware Check Plugin",
 				displayVersion=self._plugin_version,
 
