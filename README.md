@@ -41,11 +41,17 @@ and `firmware-broken` for firmware known to have a broken implementation of the 
 ### Unsafe firmware
 
 Please refer to the [entry on the "unsafe firmware" warning in OctoPrint's FAQ](https://faq.octoprint.org/warning-firmware-unsafe)
-for a list of currently identified printers.
+for a list of currently known to be affected printers.
 
 ### Broken firmware
 
 #### "CBD" firmware
 
 Please refer to the [entry on the "broken CBD firmware" warning in OctoPrint's FAQ](https://faq.octoprint.org/warning-firmware-broken-cbd)
-for a list of currently identified printers.
+for a list of currently known to be affected printers.
+
+#### Creality firmware with broken temperature reporting
+
+Please refer to the [entry on the this warning in OctoPrint's FAQ](https://faq.octoprint.org/warning-firmware-broken-creality-temp)
+for variants of this and a list of currently known to be affected printers.
+
