@@ -6,7 +6,7 @@ __copyright__ = "Copyright (C) 2019 The OctoPrint Project - Released under terms
 
 from flask_babel import gettext
 from octoprint.util.version import get_comparable_version
-from . import Check, AuthorCheck, Severity
+from . import Check, NegativeCapCheck, AuthorCheck, Severity
 
 class FirmwareUnsafeChecks(object):
 	@classmethod
@@ -51,6 +51,14 @@ class AnycubicCheck(Check):
 		Check.__init__(self)
 		self._author_matches = None
 		self._version_matches = None
+
+	def m115(self, name, data):
+		# make sure we stop scanning once we see the response to M115
+		if self._author_matches is None:
+			self._author_matches = False
+		if self._version_matches is None:
+			self._version_matches = False
+		self._evaluate()
 
 	def received(self, line):
 		if not line:
@@ -169,13 +177,9 @@ class RepetierBefore092Check(Check):
 			version = get_comparable_version(version, base=True)
 		return version
 
-class ThermalProtectionCapCheck(Check):
+class ThermalProtectionCapCheck(NegativeCapCheck):
 	"""
 	Firmware reporting disabled THERMAL_PROTECTION capability
 	"""
 	name = "capability"
-
-	def cap(self, cap, enabled):
-		if cap == "THERMAL_PROTECTION":
-			self._triggered = not enabled
-			self._active = False
+	CAP = "THERMAL_PROTECTION"

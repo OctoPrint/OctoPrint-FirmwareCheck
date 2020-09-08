@@ -92,7 +92,6 @@ class FirmwareCheckPlugin(octoprint.plugin.AssetPlugin,
 		                 to_unicode(firmware_name, errors="replace"),
 		                 dict((to_unicode(key, errors="replace"), to_unicode(value, errors="replace"))
 		                      for key, value in firmware_data.items()))
-		self._scan_received = False
 
 	##~~ Firmware capability hook handler
 
@@ -136,6 +135,7 @@ class FirmwareCheckPlugin(octoprint.plugin.AssetPlugin,
 	def _run_checks(self, check_type, *args, **kwargs):
 		changes = False
 
+		still_active = False
 		for warning_type, check_data in FIRMWARE_CHECKS.items():
 			checks = check_data.get("checks")
 			message = check_data.get("message")
@@ -178,6 +178,11 @@ class FirmwareCheckPlugin(octoprint.plugin.AssetPlugin,
 
 				check.evaluate_timeout()
 				self._logger.debug("Check {} active? {}".format(check, check.active))
+
+			still_active = any(check.active for check in checks) or still_active
+
+		self._scan_received = still_active
+		self._logger.debug("Scanning received lines enabled? {}".format(self._scan_received))
 
 		if changes:
 			self._ping_clients()

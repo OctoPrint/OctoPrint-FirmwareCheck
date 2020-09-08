@@ -55,11 +55,82 @@ class Check(object):
 		self._start_time = None
 
 
+class LineCheck(Check):
+	def __init__(self):
+		Check.__init__(self)
+		self._matches = None
+
+	def received(self, line):
+		if not line:
+			return
+
+		if self._is_match(line):
+			self._matches = True
+		elif self._is_ruled_out(line):
+			self._matches = False
+
+		self._evaluate()
+
+	def m115(self, name, data):
+		# M115 usually means we stop scanning received lines
+		if self._matches is None:
+			self._matches = False
+		self._evaluate()
+
+	def _evaluate(self):
+		if self._matches is None:
+			return
+		self._triggered = self._matches
+		self._active = False
+
+	def reset(self):
+		Check.reset(self)
+		self._matches = None
+
+	def _is_match(self, line):
+		return False
+
+	def _is_ruled_out(self, line):
+		return False
+
+
+class CapCheck(Check):
+	CAP = None
+
+	def __init__(self):
+		Check.__init__(self)
+		self.cap_seen = False
+
+	def cap(self, cap, enabled):
+		self.cap_seen = True
+		if cap == self.CAP:
+			self._triggered = self._eval(enabled)
+			self._active = False
+
+	def received(self, line):
+		if self.cap_seen and not line.startswith("Cap:"):
+			# first non cap line after cap report: cap report over, deactivate
+			self._active = False
+
+	def _eval(self, enabled):
+		# trigger when enabled
+		return enabled
+
+
+class NegativeCapCheck(CapCheck):
+	def _eval(self, enabled):
+		# trigger when NOT enabled
+		return not enabled
+
 
 class AuthorCheck(Check):
 	authors = ()
 
 	AUTHOR = "| Author: ".lower()
+
+	def m115(self, name, data):
+		# M115 usually means we stop scanning received lines
+		self._active = False
 
 	def received(self, line):
 		if not line:

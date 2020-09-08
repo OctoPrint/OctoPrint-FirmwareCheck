@@ -5,7 +5,7 @@ __license__ = 'GNU Affero General Public License http://www.gnu.org/licenses/agp
 __copyright__ = "Copyright (C) 2020 The OctoPrint Project - Released under terms of the AGPLv3 License"
 
 from flask_babel import gettext
-from . import Check, Severity
+from . import LineCheck, Severity
 
 class FirmwareBrokenChecks(object):
 	@classmethod
@@ -17,36 +17,15 @@ class FirmwareBrokenChecks(object):
 		            severity=Severity.INFO)
 
 
-class CbdCheck(Check):
+class CbdCheck(LineCheck):
 	name = "cbd"
 	url = "https://faq.octoprint.org/warning-firmware-broken-cbd"
+	FRAGMENT = "CBD make it".lower()
 
-	CRITICAL_FRAGMENT = "CBD make it".lower()
+	def _is_match(self, line):
+		return self.FRAGMENT in line.lower()
 
-	def __init__(self):
-		Check.__init__(self)
-		self._fragment_matches = None
-
-	def received(self, line):
-		if not line:
-			return
-
-		lower_line = line.lower()
-		if self.CRITICAL_FRAGMENT in lower_line:
-			self._fragment_matches = True
-
-		self._evaluate()
-
-	def _evaluate(self):
-		if self._fragment_matches is None:
-			return
-		self._triggered = self._fragment_matches
-		self._active = False
-
-	def reset(self):
-		Check.reset(self)
-		self._fragment_matches = None
 
 class ZwlfCheck(CbdCheck):
 	name = "zwlf"
-	CRITICAL_FRAGMENT = "ZWLF make it".lower()
+	FRAGMENT = "ZWLF make it".lower()
