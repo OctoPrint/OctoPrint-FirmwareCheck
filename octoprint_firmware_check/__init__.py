@@ -176,6 +176,9 @@ class FirmwareCheckPlugin(octoprint.plugin.AssetPlugin,
 					changes = True
 					break
 
+				check.evaluate_timeout()
+				self._logger.debug("Check {} active? {}".format(check, check.active))
+
 		if changes:
 			self._ping_clients()
 
