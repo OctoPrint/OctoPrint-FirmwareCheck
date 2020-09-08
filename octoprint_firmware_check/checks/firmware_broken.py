@@ -10,7 +10,7 @@ from . import LineCheck, Severity
 class FirmwareBrokenChecks(object):
 	@classmethod
 	def as_dict(cls):
-		return dict(checks=(CbdCheck(),),
+		return dict(checks=(CbdCheck(), ZwlfCheck()),
 		            message=gettext("Your printer's firmware is known to have a broken implementation of the "
 		                            "communication protocol. This will cause print failures. You'll need to "
 		                            "take additional steps for OctoPrint to work with it."),
