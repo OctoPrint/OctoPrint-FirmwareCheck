@@ -20,6 +20,16 @@ or manually using this URL:
 
     https://github.com/OctoPrint/OctoPrint-FirmwareCheck/archive/master.zip
 
+To install and/or rollback to a specific version `<version>`, either use this URL in the plugin manager:
+
+    https://github.com/OctoPrint/OctoPrint-FirmwareCheck/archive/<version>.zip
+
+or run
+
+    pip install OctoPrint-FirmwareCheck==<version>
+
+in your OctoPrint virtual environment, substituting `<version>` accordingly.
+
 ## Events
 
 ### plugin_firmware_check_warning
@@ -45,7 +55,7 @@ for a list of currently known to be affected printers.
 
 ### Broken firmware
 
-#### "CBD" firmware
+#### "CBD"/"ZWLF" firmware
 
 Please refer to the [entry on the "broken CBD firmware" warning in OctoPrint's FAQ](https://faq.octoprint.org/warning-firmware-broken-cbd)
 for a list of currently known to be affected printers.
