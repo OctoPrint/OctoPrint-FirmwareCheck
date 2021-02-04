@@ -165,7 +165,7 @@ class FirmwareCheckPlugin(
                 stable_branch={
                     "name": "Stable",
                     "branch": "master",
-                    "comittish": ["master"],
+                    "comittish": ["devel", "master"],
                 },
                 prerelease_branches=[
                     {
