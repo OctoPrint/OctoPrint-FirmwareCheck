@@ -96,7 +96,12 @@ jobs:
   publish-on-testpypi:
     name: 📦 Publish on TestPyPI
     if: github.event_name == 'release'
-    needs: build
+    needs:
+      - build
+      - lint-black
+      - lint-prettier
+      - lint-isort
+      - lint-flake8
     runs-on: ubuntu-latest
     steps:
       - name: ⬇ Download build result
@@ -114,7 +119,7 @@ jobs:
   publish-on-pypi:
     name: 📦 Publish tagged releases to PyPI
     if: github.event_name == 'release'
-    needs: build
+    needs: publish-on-testpypi
     runs-on: ubuntu-latest
     steps:
       - name: ⬇ Download build result
