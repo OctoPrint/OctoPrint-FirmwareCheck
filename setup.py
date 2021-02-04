@@ -752,6 +752,12 @@ setup_parameters = create_plugin_setup_parameters(
     additional_packages=plugin_additional_packages,
     ignored_packages=plugin_ignored_packages,
     additional_data=plugin_additional_data,
+    extra_requires={
+        "develop": [
+            # pre-commit
+            "pre-commit",
+        ]
+    },
 )
 
 setup_parameters["long_description"] = read_file_contents(os.path.join(here, "README.md"))
