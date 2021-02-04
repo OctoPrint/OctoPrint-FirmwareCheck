@@ -5,7 +5,7 @@ on:
       - master
       - devel
   release:
-    types: [published, prereleased]
+    types: [published]
 
 jobs:
   build:
