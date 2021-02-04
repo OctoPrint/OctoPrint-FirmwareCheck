@@ -28,6 +28,70 @@ jobs:
           name: dist
           path: dist
 
+  lint-black:
+    name: 🧹 black
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 🏗 Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: 🏗 Set up dev dependencies
+        run: |
+          pip install -e .[develop]
+      - name: 🚀 Run black
+        run: |
+          pre-commit run --hook-stage manual black --all-files --show-diff-on-failure
+
+  lint-prettier:
+    name: 🧹 prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 🏗 Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: 🏗 Set up dev dependencies
+        run: |
+          pip install -e .[develop]
+      - name: 🚀 Run prettier
+        run: |
+          pre-commit run --hook-stage manual prettier --all-files --show-diff-on-failure
+
+  lint-isort:
+    name: 🧹 isort
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 🏗 Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: 🏗 Set up dev dependencies
+        run: |
+          pip install -e .[develop]
+      - name: 🚀 Run isort
+        run: |
+          pre-commit run --hook-stage manual isort --all-files --show-diff-on-failure
+
+  lint-flake8:
+    name: 🧹 Flake8
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 🏗 Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: 🏗 Set up dev dependencies
+        run: |
+          pip install -e .[develop]
+      - name: 🚀 Run flake8
+        run: |
+          pre-commit run --hook-stage manual flake8 --all-files
+
   publish-on-testpypi:
     name: 📦 Publish on TestPyPI
     if: github.event_name == 'push'

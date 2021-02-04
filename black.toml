@@ -1,0 +1,17 @@
+[tool.black]
+line-length = 90
+include = '''
+
+(
+    (
+        src
+    ).*\.pyi?$
+)|(
+    setup\.py
+)
+'''
+exclude = '''
+
+(
+)
+'''

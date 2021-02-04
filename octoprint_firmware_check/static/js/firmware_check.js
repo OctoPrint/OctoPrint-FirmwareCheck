@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
     function FirmwareCheckViewModel(parameters) {
         var self = this;
 
@@ -8,22 +8,27 @@ $(function() {
 
         self.warnings = ko.observableArray([]);
 
-        self.requestData = function() {
-            if (!self.loginState.hasPermission(self.access.permissions.PLUGIN_FIRMWARE_CHECK_DISPLAY)) {
+        self.requestData = function () {
+            if (
+                !self.loginState.hasPermission(
+                    self.access.permissions.PLUGIN_FIRMWARE_CHECK_DISPLAY
+                )
+            ) {
                 self.warnings([]);
                 return;
             }
 
-            OctoPrint.plugins.firmware_check.get()
+            OctoPrint.plugins.firmware_check
+                .get()
                 .done(self.fromResponse)
-                .fail(function() {
+                .fail(function () {
                     self.warnings([]);
                 });
         };
 
-        self.fromResponse = function(data) {
+        self.fromResponse = function (data) {
             var warnings = [];
-            _.each(data, function(data, warning_type) {
+            _.each(data, function (data, warning_type) {
                 warnings.push({
                     type: warning_type,
                     message: gettext(data.message),
@@ -34,15 +39,15 @@ $(function() {
             self.warnings(warnings);
         };
 
-        self.onStartup = function() {
+        self.onStartup = function () {
             self.requestData();
         };
 
-        self.onUserPermissionsChanged = self.onUserLoggedIn = self.onUserLoggedOut = function() {
+        self.onUserPermissionsChanged = self.onUserLoggedIn = self.onUserLoggedOut = function () {
             self.requestData();
         };
 
-        self.onDataUpdaterPluginMessage = function(plugin, data) {
+        self.onDataUpdaterPluginMessage = function (plugin, data) {
             if (plugin !== "firmware_check") return;
             if (!data.hasOwnProperty("type")) return;
 
@@ -51,7 +56,7 @@ $(function() {
             }
         };
 
-        self.cssClass = function(data) {
+        self.cssClass = function (data) {
             if (data.severity) {
                 return "firmware_check_warning_" + data.severity;
             } else {
@@ -59,11 +64,16 @@ $(function() {
             }
         };
 
-        self.warningText = function(data) {
+        self.warningText = function (data) {
             switch (data.type) {
-                case "firmware-unsafe": return gettext("Critical Warning: Firmware Unsafe");
-                case "firmware-broken": return gettext("Warning: Firmware Broken");
-                default: return (data.severity === "critical") ? gettext("Critical Warning") : gettext("Warning");
+                case "firmware-unsafe":
+                    return gettext("Critical Warning: Firmware Unsafe");
+                case "firmware-broken":
+                    return gettext("Warning: Firmware Broken");
+                default:
+                    return data.severity === "critical"
+                        ? gettext("Critical Warning")
+                        : gettext("Warning");
             }
         };
     }
@@ -74,4 +84,3 @@ $(function() {
         elements: ["#sidebar_plugin_firmware_check_wrapper"]
     });
 });
-
