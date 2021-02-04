@@ -13,6 +13,7 @@ from octoprint.access import USER_GROUP
 from octoprint.access.permissions import Permissions
 from octoprint.events import Events
 from octoprint.util import to_unicode
+from octoprint.util.version import is_octoprint_compatible
 
 from .checks import Severity
 from .checks.firmware_broken import FirmwareBrokenChecks
@@ -324,3 +325,20 @@ __plugin_hooks__ = {
     "octoprint.events.register_custom_events": register_custom_events,
     "octoprint.access.permissions": __plugin_implementation__.get_additional_permissions,
 }
+
+if is_octoprint_compatible("<1.6"):
+    __plugin_settings_overlay__ = {
+        "appearance": {
+            "components": {
+                "order": {
+                    "sidebar": [
+                        "plugin_firmware_check_warning",
+                        "plugin_firmware_check_info",
+                        "connection",
+                        "state",
+                        "files",
+                    ]
+                }
+            }
+        }
+    }
