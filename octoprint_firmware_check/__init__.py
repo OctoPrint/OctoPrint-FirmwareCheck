@@ -165,13 +165,13 @@ class FirmwareCheckPlugin(
                 stable_branch={
                     "name": "Stable",
                     "branch": "master",
-                    "comittish": ["devel", "master"],
+                    "commitish": ["devel", "master"],
                 },
                 prerelease_branches=[
                     {
                         "name": "Prerelease",
                         "branch": "devel",
-                        "comittish": ["devel", "master"],
+                        "commitish": ["devel", "master"],
                     }
                 ],
                 # update method: pip
