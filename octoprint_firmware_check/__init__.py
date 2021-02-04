@@ -132,6 +132,18 @@ class FirmwareCheckPlugin(
                 user="OctoPrint",
                 repo="OctoPrint-FirmwareCheck",
                 current=self._plugin_version,
+                stable_branch={
+                    "name": "Stable",
+                    "branch": "master",
+                    "comittish": ["master"],
+                },
+                prerelease_branches=[
+                    {
+                        "name": "Prerelease",
+                        "branch": "devel",
+                        "comittish": ["devel", "master"],
+                    }
+                ],
                 # update method: pip
                 pip="https://github.com/OctoPrint/OctoPrint-FirmwareCheck/archive/{target_version}.zip",
             )
