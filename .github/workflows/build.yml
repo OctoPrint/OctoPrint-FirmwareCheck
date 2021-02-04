@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - devel
   release:
     types: [published, prereleased]
 
@@ -94,7 +95,7 @@ jobs:
 
   publish-on-testpypi:
     name: 📦 Publish on TestPyPI
-    if: github.event_name == 'push'
+    if: github.event_name == 'release'
     needs: build
     runs-on: ubuntu-latest
     steps:
