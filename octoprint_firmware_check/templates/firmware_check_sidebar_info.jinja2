@@ -1,0 +1,11 @@
+<!-- ko foreach: infos -->
+<p><strong data-bind="text: $root.warningText($data)"></strong></p>
+<p class="firmware_check_info" data-bind="class: $root.cssClass($data)">
+    <span data-bind="text: message"></span><br>
+    <a target="_blank" rel="noreferrer noopener" data-bind="attr: {href: url}">{{ _('Learn more...') }}</a>
+</p>
+<!-- /ko -->
+
+<small>
+    <a href="javascript:void(0)" data-bind="click: disableInfos">{{ _('Disable firmware checks of severity "Info"') }}</a> <i class="fa fa-spinner fa-spin" data-bind="visible: disablingInfos"></i>
+</small>

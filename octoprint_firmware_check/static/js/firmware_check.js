@@ -5,8 +5,12 @@ $(function () {
         self.loginState = parameters[0];
         self.printerState = parameters[1];
         self.access = parameters[2];
+        self.settings = parameters[3];
 
         self.warnings = ko.observableArray([]);
+        self.infos = ko.observableArray([]);
+
+        self.disablingInfos = ko.observable(false);
 
         self.requestData = function () {
             if (
@@ -28,22 +32,47 @@ $(function () {
 
         self.fromResponse = function (data) {
             var warnings = [];
+            var infos = [];
             _.each(data, function (data, warning_type) {
-                warnings.push({
+                var item = {
                     type: warning_type,
                     message: gettext(data.message),
                     severity: data.severity,
                     url: data.url
-                });
+                };
+                if (data.severity === "info") {
+                    if (!self.settings.settings.plugins.firmware_check.ignore_infos()) {
+                        infos.push(item);
+                    }
+                } else {
+                    warnings.push(item);
+                }
             });
             self.warnings(warnings);
+            self.infos(infos);
         };
 
         self.onStartup = function () {
             self.requestData();
         };
 
-        self.onUserPermissionsChanged = self.onUserLoggedIn = self.onUserLoggedOut = function () {
+        var subbed = false;
+        self.onStartup = self.onUserPermissionsChanged = self.onUserLoggedIn = self.onUserLoggedOut = function () {
+            if (
+                self.settings &&
+                self.settings.settings &&
+                self.settings.settings.plugins &&
+                self.settings.settings.plugins.firmware_check &&
+                !subbed
+            ) {
+                subbed = true;
+                self.settings.settings.plugins.firmware_check.ignore_infos.subscribe(
+                    function () {
+                        self.requestData();
+                    }
+                );
+            }
+
             self.requestData();
         };
 
@@ -70,17 +99,40 @@ $(function () {
                     return gettext("Critical Warning: Firmware Unsafe");
                 case "firmware-broken":
                     return gettext("Warning: Firmware Broken");
+                case "firmware-development":
+                    return gettext("Info: Firmware Development Build");
                 default:
                     return data.severity === "critical"
                         ? gettext("Critical Warning")
-                        : gettext("Warning");
+                        : data.severity === "warning"
+                        ? gettext("Warning")
+                        : gettext("Info");
+            }
+        };
+
+        self.disableInfos = function () {
+            if (self.loginState.hasPermission(self.access.permissions.SETTINGS)) {
+                self.disablingInfos(true);
+                OctoPrint.settings
+                    .savePluginSettings("firmware_check", {ignore_infos: true})
+                    .always(function () {
+                        self.disablingInfos(false);
+                    });
             }
         };
     }
 
     OCTOPRINT_VIEWMODELS.push({
         construct: FirmwareCheckViewModel,
-        dependencies: ["loginStateViewModel", "printerStateViewModel", "accessViewModel"],
-        elements: ["#sidebar_plugin_firmware_check_wrapper"]
+        dependencies: [
+            "loginStateViewModel",
+            "printerStateViewModel",
+            "accessViewModel",
+            "settingsViewModel"
+        ],
+        elements: [
+            "#sidebar_plugin_firmware_check_warning_wrapper",
+            "#sidebar_plugin_firmware_check_info_wrapper"
+        ]
     });
 });

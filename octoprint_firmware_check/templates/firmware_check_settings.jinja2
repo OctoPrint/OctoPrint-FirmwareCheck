@@ -1,0 +1,12 @@
+<h3>{{ _('Firmware Check') }}</h3>
+
+<form class="form-horizontal" onsubmit="return false;">
+    <div class="control-group">
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" data-bind="checked: settings.plugins.firmware_check.ignore_infos"> {{ _('Disable warnings of severity "info"') }}
+            </label>
+            <span class="help-block">{{ _('Check this to disable warnings from firmware checks that are only of informational "heads-up" nature, like running a firmware development build.') }}</span>
+        </div>
+    </div>
+</form>

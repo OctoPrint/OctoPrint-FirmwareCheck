@@ -150,4 +150,5 @@ class AuthorCheck(Check):
 
 class Severity(object):
     INFO = "info"
+    WARNING = "warning"
     CRITICAL = "critical"

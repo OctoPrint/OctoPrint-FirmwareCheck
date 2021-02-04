@@ -19,7 +19,7 @@ class FirmwareBrokenChecks(object):
                 "communication protocol. This may cause print failures or other annoyances. "
                 "You'll need to take additional steps for OctoPrint to fully work with it."
             ),
-            severity=Severity.INFO,
+            severity=Severity.WARNING,
         )
 
 

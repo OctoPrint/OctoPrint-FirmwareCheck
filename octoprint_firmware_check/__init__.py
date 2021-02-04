@@ -16,6 +16,7 @@ from octoprint.util import to_unicode
 
 from .checks import Severity
 from .checks.firmware_broken import FirmwareBrokenChecks
+from .checks.firmware_development import FirmwareDevelopmentChecks
 from .checks.firmware_unsafe import FirmwareUnsafeChecks
 
 TERMINAL_WARNING = """
@@ -27,9 +28,19 @@ Learn more at {url}
 
 """
 
+TERMINAL_INFO = """
+---------------------------------------------------------------------------
+{message}
+
+Learn more at {url}
+---------------------------------------------------------------------------
+
+"""
+
 FIRMWARE_CHECKS = {
     "firmware-unsafe": FirmwareUnsafeChecks.as_dict(),
     "firmware-broken": FirmwareBrokenChecks.as_dict(),
+    "firmware-development": FirmwareDevelopmentChecks.as_dict(),
 }
 
 
@@ -38,6 +49,7 @@ class FirmwareCheckPlugin(
     octoprint.plugin.EventHandlerPlugin,
     octoprint.plugin.SimpleApiPlugin,
     octoprint.plugin.TemplatePlugin,
+    octoprint.plugin.SettingsPlugin,
 ):
 
     # noinspection PyMissingConstructor
@@ -55,7 +67,19 @@ class FirmwareCheckPlugin(
                 data_bind="visible: printerState.isOperational() && loginState.isAdmin() && warnings().length > 0",
                 icon="exclamation-triangle",
                 styles_wrapper=["display: none"],
-            )
+                template="firmware_check_sidebar_warning.jinja2",
+                suffix="_warning",
+            ),
+            dict(
+                type="sidebar",
+                name=gettext("Info"),
+                data_bind="visible: printerState.isOperational() && loginState.isAdmin() && infos().length > 0",
+                icon="info-circle",
+                styles_wrapper=["display: none"],
+                template="firmware_check_sidebar_info.jinja2",
+                suffix="_info",
+            ),
+            dict(type="settings", name=gettext("Firmware Check"), custom_bindings=False),
         ]
 
     ##~~ AssetPlugin API
@@ -82,6 +106,11 @@ class FirmwareCheckPlugin(
         if not Permissions.PLUGIN_FIRMWARE_CHECK_DISPLAY.can():
             return flask.make_response("Insufficient rights", 403)
         return flask.jsonify(self._warnings)
+
+    ##~~ SettingsPlugin API
+
+    def get_settings_defaults(self):
+        return {"ignore_infos": False}
 
     ##~~ GCODE received hook handler
 
@@ -220,14 +249,24 @@ class FirmwareCheckPlugin(
             self._ping_clients()
 
     def _register_warning(self, warning_type, message, severity, url):
+        output = TERMINAL_WARNING
+        if severity == Severity.INFO:
+            output = TERMINAL_INFO
+
         self._log_to_terminal(
-            TERMINAL_WARNING.format(
+            output.format(
                 message="\n".join(textwrap.wrap(message, 75)),
                 warning_type=warning_type,
                 url=url,
             )
         )
         self._warnings[warning_type] = dict(message=message, severity=severity, url=url)
+
+        logline = "{}. More information at {}".format(message, url)
+        if severity == Severity.INFO:
+            self._logger.info(logline)
+        else:
+            self._logger.warning(logline)
 
     def _reset_warnings(self):
         self._warnings.clear()
