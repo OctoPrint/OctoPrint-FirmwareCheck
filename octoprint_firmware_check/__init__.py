@@ -18,6 +18,7 @@ from octoprint.util.version import is_octoprint_compatible
 from .checks import Severity
 from .checks.firmware_broken import FirmwareBrokenChecks
 from .checks.firmware_development import FirmwareDevelopmentChecks
+from .checks.firmware_hostcommands import FirmwareHostcommandsChecks
 from .checks.firmware_unsafe import FirmwareUnsafeChecks
 
 TERMINAL_WARNING = """
@@ -42,6 +43,7 @@ FIRMWARE_CHECKS = {
     "firmware-unsafe": FirmwareUnsafeChecks.as_dict(),
     "firmware-broken": FirmwareBrokenChecks.as_dict(),
     "firmware-development": FirmwareDevelopmentChecks.as_dict(),
+    "firmware-hostcommands": FirmwareHostcommandsChecks.as_dict(),
 }
 
 
