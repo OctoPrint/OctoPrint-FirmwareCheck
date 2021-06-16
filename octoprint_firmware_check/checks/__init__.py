@@ -19,6 +19,7 @@ class Check(object):
         self._active = True
         self._triggered = False
         self._start_time = None
+        self.placeholders = {}
 
     def received(self, line):
         """Called when receiving a new line from the printer"""

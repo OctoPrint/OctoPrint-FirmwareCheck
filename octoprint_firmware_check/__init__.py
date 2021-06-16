@@ -223,7 +223,9 @@ class FirmwareCheckPlugin(
                     if check.url is not None:
                         url = check.url
 
-                    self._register_warning(warning_type, message, severity, url)
+                    self._register_warning(
+                        warning_type, message.format(**check.placeholders), severity, url
+                    )
 
                     # noinspection PyUnresolvedReferences
                     self._event_bus.fire(
