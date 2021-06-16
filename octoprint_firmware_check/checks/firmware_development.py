@@ -16,7 +16,10 @@ class FirmwareDevelopmentChecks(object):
     @classmethod
     def as_dict(cls):
         return dict(
-            checks=(MarlinBugfixCheck(),),
+            checks=(
+                MarlinBugfixCheck(),
+                MarlinMfsBugfixCheck(),
+            ),
             message=gettext(
                 "Your printer's firmware is a {buildtype} build of {firmware} "
                 "(build date {builddate}). It might be more unstable "
@@ -63,3 +66,23 @@ class MarlinBugfixCheck(Check):
 
         self._triggered = name and match
         self._active = False
+
+
+class MarlinMfsBugfixCheck(MarlinBugfixCheck):
+    """
+    Marlin MFS bugfix builds.
+
+    Identified by firmware name that matches "Marlin bugfix-<version>-mfs (<builddate>)"
+    """
+
+    name = "marlin_bugfix_mfs"
+    url = "https://faq.octoprint.org/warning-firmware-development-mfs"
+
+    pattern = re.compile(
+        r"marlin (?P<version>bugfix-.*-mfs)\s\((?P<builddate>.*)\)",
+    )
+
+    def __init__(self):
+        super().__init__()
+        self.placeholders["firmware"] = "Marlin by the Marlin Firmware Service"
+        self.placeholders["buildtype"] = "nightly"
