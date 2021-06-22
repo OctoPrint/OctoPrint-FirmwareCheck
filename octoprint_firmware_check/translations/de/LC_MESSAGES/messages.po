@@ -8,8 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OctoPrint-FirmwareCheck 2020.3.25\n"
 "Report-Msgid-Bugs-To: i18n@octoprint.org\n"
-"POT-Creation-Date: 2020-09-14 15:56+0200\n"
-"PO-Revision-Date: 2020-09-14 15:57+0200\n"
+"POT-Creation-Date: 2021-06-22 17:47+0200\n"
+"PO-Revision-Date: 2021-06-22 17:52+0200\n"
+"Last-Translator: \n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,21 +18,20 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
-"Last-Translator: \n"
 "X-Generator: Poedit 2.0.4\n"
 
 #: build/lib/octoprint_firmware_check/__init__.py:52
-#: octoprint_firmware_check/__init__.py:52
+#: octoprint_firmware_check/__init__.py:69
 msgid "Attention!"
 msgstr "Achtung!"
 
 #: build/lib/octoprint_firmware_check/__init__.py:110
-#: octoprint_firmware_check/__init__.py:109
+#: octoprint_firmware_check/__init__.py:149
 msgid "Allows to see firmware check warnings"
 msgstr "Erlaubt die Anzeige von Firmwarecheckwarnungen"
 
 #: build/lib/octoprint_firmware_check/__init__.py:202
-#: octoprint_firmware_check/__init__.py:229
+#: octoprint_firmware_check/__init__.py:309
 msgid ""
 "Without this plugin OctoPrint will no longer be able to check if the "
 "printer it is connected to has a known safety issue or otherwise broken "
@@ -53,7 +53,7 @@ msgstr ""
 "durchführen, damit OctoPrint damit arbeiten kann."
 
 #: build/lib/octoprint_firmware_check/checks/firmware_unsafe.py:17
-#: octoprint_firmware_check/checks/firmware_unsafe.py:17
+#: octoprint_firmware_check/checks/firmware_unsafe.py:28
 msgid ""
 "Your printer's firmware is known to lack mandatory safety features (e.g. "
 "thermal runaway protection). This is a fire risk."
@@ -63,31 +63,42 @@ msgstr ""
 "Protection). Das ist ein Brandrisiko."
 
 #: build/lib/octoprint_firmware_check/static/js/firmware_check.js:64
-#: octoprint_firmware_check/static/js/firmware_check.js:64
+#: octoprint_firmware_check/static/js/firmware_check.js:99
 msgid "Critical Warning: Firmware Unsafe"
 msgstr "Kritische Warnung: Unsichere Firmware"
 
 #: build/lib/octoprint_firmware_check/static/js/firmware_check.js:65
-#: octoprint_firmware_check/static/js/firmware_check.js:65
+#: octoprint_firmware_check/static/js/firmware_check.js:101
 msgid "Warning: Firmware Broken"
 msgstr "Warnung: Defekte Firmware"
 
 #: build/lib/octoprint_firmware_check/static/js/firmware_check.js:66
-#: octoprint_firmware_check/static/js/firmware_check.js:66
+#: octoprint_firmware_check/static/js/firmware_check.js:106
 msgid "Critical Warning"
 msgstr "Kritische Warnung"
 
 #: build/lib/octoprint_firmware_check/static/js/firmware_check.js:66
-#: octoprint_firmware_check/static/js/firmware_check.js:66
+#: octoprint_firmware_check/static/js/firmware_check.js:108
 msgid "Warning"
 msgstr "Warnung"
 
 #: build/lib/octoprint_firmware_check/templates/firmware_check_sidebar.jinja2:5
-#: octoprint_firmware_check/templates/firmware_check_sidebar.jinja2:5
+#: octoprint_firmware_check/templates/firmware_check_sidebar_info.jinja2:5
+#: octoprint_firmware_check/templates/firmware_check_sidebar_warning.jinja2:5
 msgid "Learn more..."
 msgstr "Mehr erfahren..."
 
-#: octoprint_firmware_check/checks/firmware_broken.py:14
+#: octoprint_firmware_check/__init__.py:78
+#: octoprint_firmware_check/static/js/firmware_check.js:109
+msgid "Info"
+msgstr "Info"
+
+#: octoprint_firmware_check/__init__.py:85
+#: octoprint_firmware_check/templates/firmware_check_settings.jinja2:1
+msgid "Firmware Check"
+msgstr "Firmware Check"
+
+#: octoprint_firmware_check/checks/firmware_broken.py:17
 msgid ""
 "Your printer's firmware is known to have a broken implementation of the "
 "communication protocol. This may cause print failures or other "
@@ -98,3 +109,49 @@ msgstr ""
 "Implementierung des Kommunikationsprotokolls zu haben. Das kann "
 "fehlerhafte Druckjobs verursachen. Du musst zusätzliche Schritte "
 "durchführen, damit OctoPrint damit arbeiten kann."
+
+#: octoprint_firmware_check/checks/firmware_development.py:23
+msgid ""
+"Your printer's firmware is a {buildtype} build of {firmware} (build date "
+"{builddate}). It might be more unstable than a release version and "
+"should be kept up-to-date."
+msgstr ""
+"Deine Firmware ist ein {buildtype} Build von {firmware} (Builddatum "
+"{builddate}). Sie könnte instabiler sein als eine Releaseversion und "
+"sollte aktuell gehalten werden."
+
+#: octoprint_firmware_check/checks/firmware_hostcommands.py:17
+msgid ""
+"Your printer's firmware supports host action commands, but they are "
+"disabled. The firmware will not inform OctoPrint about job pause & "
+"cancellations, filament runouts, and similar firmware-side events. If "
+"you want this functionality, you need to change your firmware's "
+"configuration."
+msgstr ""
+"Die Firmware deines Druckers unterstützt Host Action Commands, sie sind "
+"jedoch deaktiviert. Die Firmware wird OctoPrint nicht über Job-Pausen "
+"und -Abbrüche, Filament Runouts und ähnliche firmwareseitige Ereignisse "
+"informieren. Falls du diese Funktionalität willst, musst du deine "
+"Firmwarekonfiguration ändern."
+
+#: octoprint_firmware_check/static/js/firmware_check.js:103
+msgid "Info: Firmware Development Build"
+msgstr "Info: Firmware Development Build"
+
+#: octoprint_firmware_check/templates/firmware_check_settings.jinja2:7
+msgid "Disable warnings of severity \"info\""
+msgstr "Deaktiviere Warnungen der Schwere \"Info\""
+
+#: octoprint_firmware_check/templates/firmware_check_settings.jinja2:9
+msgid ""
+"Check this to disable warnings from firmware checks that are only of "
+"informational \"heads-up\" nature, like running a firmware development "
+"build."
+msgstr ""
+"Aktiviere dies um Warnungen von Firmwarechecks zu deaktivieren, die nur "
+"der Information dienen, wie z.B. die Nutzung eines Firmware Development "
+"Builds."
+
+#: octoprint_firmware_check/templates/firmware_check_sidebar_info.jinja2:10
+msgid "Disable firmware checks of severity \"Info\""
+msgstr "Deaktivere Firmware Checks der Schwere \"Info\""
