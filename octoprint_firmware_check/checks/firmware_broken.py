@@ -5,6 +5,7 @@ __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agp
 __copyright__ = "Copyright (C) 2020 The OctoPrint Project - Released under terms of the AGPLv3 License"
 
 from flask_babel import gettext
+from octoprint.settings import settings
 
 from . import LineCheck, Severity
 
@@ -13,7 +14,12 @@ class FirmwareBrokenChecks(object):
     @classmethod
     def as_dict(cls):
         return dict(
-            checks=(CbdCheck(), ZwlfCheck(), CrealityDoubleTempCheck()),
+            checks=(
+                CbdCheck(),
+                ZwlfCheck(),
+                CrealityDoubleTempCheck(),
+                CrealityTFCardCheck(),
+            ),
             message=gettext(
                 "Your printer's firmware is known to have a broken implementation of the "
                 "communication protocol. This may cause print failures or other annoyances. "
@@ -67,3 +73,25 @@ class CrealityEqualsTempCheck(CrealityDoubleTempCheck):
     def _is_match(self, line):
         # broken report: ==T:145.66 /210.00 ==B:60.15 /60.00 @:127 B@:0
         return "==T:" in line
+
+
+class CrealityTFCardCheck(LineCheck):
+    name = "creality_tfcard"
+    url = "https://faq.octoprint.org/warning-firmware-broken-creality-tfcard"
+
+    def m115(self, name, data):
+        # we cannot stop scanning after an M115 report as we might not yet have seen an SD card report then
+        pass
+
+    def _is_match(self, line):
+        return "TF card ok" in line
+
+    def _is_ruled_out(self, line):
+        # first thing that looks like a proper report stops scanning
+        lower_line = line.lower()
+        return not settings().getBoolean(["feature", "sdSupport"]) or any(
+            map(
+                lambda x: x in lower_line,
+                ("sd card ok", "sd init fail", "sd printing byte", "not sd printing"),
+            )
+        )
