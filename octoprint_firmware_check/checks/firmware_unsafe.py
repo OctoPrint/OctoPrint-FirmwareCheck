@@ -19,6 +19,7 @@ class FirmwareUnsafeChecks(object):
                 AnycubicCheck(),
                 CrealityCR10sCheck(),
                 CrealityEnder3Check(),
+                FlashforgeVoxelabAquilaCheck(),
                 MalyanM200Check(),
                 Micro3DIMECheck(),
                 Micro3DStockCheck(),
@@ -134,6 +135,21 @@ class CrealityEnder3Check(AuthorCheck):
 
     name = "creality_ender3"
     authors = (" | Author: (Ender3)".lower(),)
+
+
+class FlashforgeVoxelabAquilaCheck(Check):
+    """
+    Flashforge Voxelab Aquila stock firmware
+
+    Identified through "MACHINE_TYPE:Voxlab-1 V1" (sic!) in M115 response.
+    """
+
+    name = "flashforge_voxelab_aquila"
+    MACHINE_TYPE = "Voxlab-1 V1"  # sic!
+
+    def m115(self, name, data):
+        self._triggered = data.get("MACHINE_TYPE") == self.MACHINE_TYPE
+        self._active = False
 
 
 class MalyanM200Check(Check):
