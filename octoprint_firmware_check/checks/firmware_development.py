@@ -43,7 +43,7 @@ class MarlinBugfixCheck(Check):
     )
 
     def __init__(self):
-        super().__init__()
+        Check.__init__(self)
         self.placeholders = {
             "firmware": "Marlin",
             "version": "unknown",
@@ -83,6 +83,6 @@ class MarlinMfsBugfixCheck(MarlinBugfixCheck):
     )
 
     def __init__(self):
-        super().__init__()
+        MarlinBugfixCheck.__init__(self)
         self.placeholders["firmware"] = "Marlin by the Marlin Firmware Service"
         self.placeholders["buildtype"] = "nightly"
