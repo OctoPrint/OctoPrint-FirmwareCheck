@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agpl.html"
 __copyright__ = "Copyright (C) 2019 The OctoPrint Project - Released under terms of the AGPLv3 License"
 
@@ -9,7 +6,7 @@ import logging
 from octoprint.util import monotonic_time
 
 
-class Check(object):
+class Check:
     name = None
     url = None
 
@@ -149,7 +146,7 @@ class AuthorCheck(Check):
             self._active = False
 
 
-class Severity(object):
+class Severity:
     INFO = "info"
     WARNING = "warning"
     CRITICAL = "critical"

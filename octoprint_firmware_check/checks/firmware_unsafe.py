@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agpl.html"
 __copyright__ = "Copyright (C) 2019 The OctoPrint Project - Released under terms of the AGPLv3 License"
 
@@ -10,7 +7,7 @@ from octoprint.util.version import get_comparable_version
 from . import AuthorCheck, Check, NegativeCapCheck, Severity
 
 
-class FirmwareUnsafeChecks(object):
+class FirmwareUnsafeChecks:
     @classmethod
     def as_dict(cls):
         return dict(
