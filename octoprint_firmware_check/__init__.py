@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 __license__ = "GNU Affero General Public License http://www.gnu.org/licenses/agpl.html"
 __copyright__ = "Copyright (C) 2018 The OctoPrint Project - Released under terms of the AGPLv3 License"
 
@@ -54,7 +51,6 @@ class FirmwareCheckPlugin(
     octoprint.plugin.TemplatePlugin,
     octoprint.plugin.SettingsPlugin,
 ):
-
     # noinspection PyMissingConstructor
     def __init__(self):
         self._warnings = dict()
@@ -128,10 +124,10 @@ class FirmwareCheckPlugin(
         self._run_checks(
             "m115",
             to_unicode(firmware_name, errors="replace"),
-            dict(
-                (to_unicode(key, errors="replace"), to_unicode(value, errors="replace"))
+            {
+                to_unicode(key, errors="replace"): to_unicode(value, errors="replace")
                 for key, value in firmware_data.items()
-            ),
+            },
         )
 
     ##~~ Firmware capability hook handler
@@ -241,14 +237,12 @@ class FirmwareCheckPlugin(
                     break
 
                 check.evaluate_timeout()
-                self._logger.debug("Check {} active? {}".format(check, check.active))
+                self._logger.debug(f"Check {check} active? {check.active}")
 
             still_active = any(check.active for check in checks) or still_active
 
         self._scan_received = still_active
-        self._logger.debug(
-            "Scanning received lines enabled? {}".format(self._scan_received)
-        )
+        self._logger.debug(f"Scanning received lines enabled? {self._scan_received}")
 
         if changes:
             self._ping_clients()
@@ -267,7 +261,7 @@ class FirmwareCheckPlugin(
         )
         self._warnings[warning_type] = dict(message=message, severity=severity, url=url)
 
-        logline = "{}. More information at {}".format(message, url)
+        logline = f"{message}. More information at {url}"
         if severity == Severity.INFO:
             self._logger.info(logline)
         else:

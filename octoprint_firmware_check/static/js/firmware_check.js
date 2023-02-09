@@ -57,24 +57,28 @@ $(function () {
         };
 
         var subbed = false;
-        self.onStartup = self.onUserPermissionsChanged = self.onUserLoggedIn = self.onUserLoggedOut = function () {
-            if (
-                self.settings &&
-                self.settings.settings &&
-                self.settings.settings.plugins &&
-                self.settings.settings.plugins.firmware_check &&
-                !subbed
-            ) {
-                subbed = true;
-                self.settings.settings.plugins.firmware_check.ignore_infos.subscribe(
-                    function () {
-                        self.requestData();
+        self.onStartup =
+            self.onUserPermissionsChanged =
+            self.onUserLoggedIn =
+            self.onUserLoggedOut =
+                function () {
+                    if (
+                        self.settings &&
+                        self.settings.settings &&
+                        self.settings.settings.plugins &&
+                        self.settings.settings.plugins.firmware_check &&
+                        !subbed
+                    ) {
+                        subbed = true;
+                        self.settings.settings.plugins.firmware_check.ignore_infos.subscribe(
+                            function () {
+                                self.requestData();
+                            }
+                        );
                     }
-                );
-            }
 
-            self.requestData();
-        };
+                    self.requestData();
+                };
 
         self.onDataUpdaterPluginMessage = function (plugin, data) {
             if (plugin !== "firmware_check") return;
