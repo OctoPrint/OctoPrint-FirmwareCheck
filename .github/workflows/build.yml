@@ -12,7 +12,7 @@ jobs:
     name: 🔨 Build distribution
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: 🏗 Set up Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -33,7 +33,7 @@ jobs:
     name: 🧹 black
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: 🏗 Set up Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -49,7 +49,7 @@ jobs:
     name: 🧹 prettier
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: 🏗 Set up Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -65,7 +65,7 @@ jobs:
     name: 🧹 isort
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: 🏗 Set up Python 3.7
         uses: actions/setup-python@v1
         with:
@@ -81,7 +81,7 @@ jobs:
     name: 🧹 Flake8
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: 🏗 Set up Python 3.7
         uses: actions/setup-python@v1
         with:
