@@ -50,3 +50,10 @@ repos:
           - eslint@7.19.0
           - eslint-plugin-es5@v1.3.0
         files: \.js$
+  - repo: https://github.com/OctoPrint/pre-commit-lessc
+    rev: 4.2.0
+    hooks:
+      - id: lessc
+        args: ["--wrapper-quiet", "--clean-css=--s1 --advanced --compatibility=ie8"]
+        additional_dependencies: ["less-plugin-clean-css"]
+        files: \.less$
