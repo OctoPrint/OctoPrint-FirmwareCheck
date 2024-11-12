@@ -52,6 +52,11 @@ jobs:
       - build
       - pre-commit
     runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/OctoPrint-FirmwareCheck
+    permissions:
+      id-token: write
     steps:
       - name: ⬇ Download build result
         uses: actions/download-artifact@v3
@@ -61,13 +66,18 @@ jobs:
       - name: 📦 Publish to index
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          repository_url: https://test.pypi.org/legacy/
+          repository-url: https://test.pypi.org/legacy/
 
   publish-on-pypi:
     name: 📦 Publish tagged releases to PyPI
     if: github.event_name == 'release'
     needs: publish-on-testpypi
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/OctoPrint-FirmwareCheck
+    permissions:
+      id-token: write
     steps:
       - name: ⬇ Download build result
         uses: actions/download-artifact@v3
