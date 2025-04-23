@@ -3,6 +3,7 @@ __copyright__ = "Copyright (C) 2019 The OctoPrint Project - Released under terms
 
 from flask_babel import gettext
 from octoprint.util.version import get_comparable_version
+from packaging.version import InvalidVersion
 
 from . import AuthorCheck, Check, NegativeCapCheck, Severity
 
@@ -94,7 +95,11 @@ class AnycubicCheck(Check):
 
     def _broken_version(self, line):
         version_str = line[len(self.VERSION) :]
-        version = get_comparable_version(version_str, base=True)
+        try:
+            version = get_comparable_version(version_str, base=True)
+        except InvalidVersion:
+            version = None
+
         if version is not None and version < self.FIXED_VERSION:
             return True
         else:
@@ -161,11 +166,17 @@ class MalyanM200Check(Check):
     FIXED_VERSION = get_comparable_version("4.0")
 
     def m115(self, name, data):
+        try:
+            version = get_comparable_version(data.get("VER", "0"))
+        except InvalidVersion:
+            version = None
+
         self._triggered = (
             name
             and name.lower().startswith("malyan")
             and data.get("MODEL") == "M200"
-            and get_comparable_version(data.get("VER", "0")) < self.FIXED_VERSION
+            and version is not None
+            and version < self.FIXED_VERSION
         )
         self._active = False
 
@@ -224,7 +235,10 @@ class RepetierBefore092Check(Check):
         version = None
         if "_" in name:
             _, version = name.split("_", 1)
-            version = get_comparable_version(version, base=True)
+            try:
+                version = get_comparable_version(version, base=True)
+            except InvalidVersion:
+                pass
         return version
 
 
