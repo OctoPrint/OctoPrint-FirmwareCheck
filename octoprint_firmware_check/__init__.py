@@ -310,7 +310,7 @@ def register_custom_events(*args, **kwargs):
 
 
 __plugin_name__ = "Firmware Check"
-__plugin_pythoncompat__ = ">=2.7,<4"  # python 2 and 3
+__plugin_pythoncompat__ = ">=3.7,<4"
 __plugin_disabling_discouraged__ = gettext(
     "Without this plugin OctoPrint will no longer be able to "
     "check if the printer it is connected to has a known safety "
