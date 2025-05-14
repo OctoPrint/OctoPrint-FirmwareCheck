@@ -10,8 +10,8 @@ from . import AuthorCheck, Check, NegativeCapCheck, Severity
 class FirmwareUnsafeChecks:
     @classmethod
     def as_dict(cls):
-        return dict(
-            checks=(
+        return {
+            "checks": (
                 AnetA8Check(),
                 AnycubicCheck(),
                 CrealityCR10sCheck(),
@@ -23,12 +23,12 @@ class FirmwareUnsafeChecks:
                 RepetierBefore092Check(),
                 ThermalProtectionCapCheck(),
             ),
-            message=gettext(
+            "message": gettext(
                 "Your printer's firmware is known to lack mandatory safety features (e.g. "
                 "thermal runaway protection). This is a fire risk."
             ),
-            severity=Severity.CRITICAL,
-        )
+            "severity": Severity.CRITICAL,
+        }
 
 
 class AnetA8Check(Check):

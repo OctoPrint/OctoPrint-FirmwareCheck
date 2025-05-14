@@ -12,18 +12,18 @@ from . import Check, Severity
 class FirmwareDevelopmentChecks:
     @classmethod
     def as_dict(cls):
-        return dict(
-            checks=(
+        return {
+            "checks": (
                 MarlinBugfixCheck(),
                 MarlinMfsBugfixCheck(),
             ),
-            message=gettext(
+            "message": gettext(
                 "Your printer's firmware is a {buildtype} build of {firmware} "
                 "(build date {builddate}). It might be more unstable "
                 "than a release version and should be kept up-to-date."
             ),
-            severity=Severity.INFO,
-        )
+            "severity": Severity.INFO,
+        }
 
 
 class MarlinBugfixCheck(Check):

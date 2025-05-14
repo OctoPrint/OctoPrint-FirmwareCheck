@@ -53,43 +53,47 @@ class FirmwareCheckPlugin(
 ):
     # noinspection PyMissingConstructor
     def __init__(self):
-        self._warnings = dict()
+        self._warnings = {}
         self._scan_received = True
 
     ##~~ TemplatePlugin API
 
     def get_template_configs(self):
         return [
-            dict(
-                type="sidebar",
-                name=gettext("Attention!"),
-                data_bind="visible: printerState.isOperational() && loginState.isAdmin() && warnings().length > 0",
-                icon="exclamation-triangle",
-                styles_wrapper=["display: none"],
-                template="firmware_check_sidebar_warning.jinja2",
-                suffix="_warning",
-            ),
-            dict(
-                type="sidebar",
-                name=gettext("Info"),
-                data_bind="visible: printerState.isOperational() && loginState.isAdmin() && infos().length > 0",
-                icon="info-circle",
-                styles_wrapper=["display: none"],
-                template="firmware_check_sidebar_info.jinja2",
-                suffix="_info",
-            ),
-            dict(type="settings", name=gettext("Firmware Check"), custom_bindings=False),
+            {
+                "type": "sidebar",
+                "name": gettext("Attention!"),
+                "data_bind": "visible: printerState.isOperational() && loginState.isAdmin() && warnings().length > 0",
+                "icon": "exclamation-triangle",
+                "styles_wrapper": ["display: none"],
+                "template": "firmware_check_sidebar_warning.jinja2",
+                "suffix": "_warning",
+            },
+            {
+                "type": "sidebar",
+                "name": gettext("Info"),
+                "data_bind": "visible: printerState.isOperational() && loginState.isAdmin() && infos().length > 0",
+                "icon": "info-circle",
+                "styles_wrapper": ["display: none"],
+                "template": "firmware_check_sidebar_info.jinja2",
+                "suffix": "_info",
+            },
+            {
+                "type": "settings",
+                "name": gettext("Firmware Check"),
+                "custom_bindings": False,
+            },
         ]
 
     ##~~ AssetPlugin API
 
     def get_assets(self):
-        return dict(
-            js=("js/firmware_check.js",),
-            clientjs=("clientjs/firmware_check.js",),
-            css=("css/firmware_check.css",),
-            less=("less/firmware_check.less",),
-        )
+        return {
+            "js": ("js/firmware_check.js",),
+            "clientjs": ("clientjs/firmware_check.js",),
+            "css": ("css/firmware_check.css",),
+            "less": ("less/firmware_check.less",),
+        }
 
     ##~~ EventHandlerPlugin API
 
@@ -139,33 +143,33 @@ class FirmwareCheckPlugin(
 
     def get_additional_permissions(self):
         return [
-            dict(
-                key="DISPLAY",
-                name="Display firmware check warnings",
-                description=gettext("Allows to see firmware check warnings"),
-                roles=["display"],
-                default_groups=[USER_GROUP],
-            )
+            {
+                "key": "DISPLAY",
+                "name": "Display firmware check warnings",
+                "description": gettext("Allows to see firmware check warnings"),
+                "roles": ["display"],
+                "default_groups": [USER_GROUP],
+            }
         ]
 
     ##~~ Softwareupdate hook
 
     def get_update_information(self):
-        return dict(
-            firmware_check=dict(
-                displayName="Firmware Check Plugin",
-                displayVersion=self._plugin_version,
+        return {
+            "firmware_check": {
+                "displayName": "Firmware Check Plugin",
+                "displayVersion": self._plugin_version,
                 # version check: github repository
-                type="github_release",
-                user="OctoPrint",
-                repo="OctoPrint-FirmwareCheck",
-                current=self._plugin_version,
-                stable_branch={
+                "type": "github_release",
+                "user": "OctoPrint",
+                "repo": "OctoPrint-FirmwareCheck",
+                "current": self._plugin_version,
+                "stable_branch": {
                     "name": "Stable",
                     "branch": "master",
                     "commitish": ["devel", "master"],
                 },
-                prerelease_branches=[
+                "prerelease_branches": [
                     {
                         "name": "Prerelease",
                         "branch": "devel",
@@ -173,9 +177,9 @@ class FirmwareCheckPlugin(
                     }
                 ],
                 # update method: pip
-                pip="https://github.com/OctoPrint/OctoPrint-FirmwareCheck/archive/{target_version}.zip",
-            )
-        )
+                "pip": "https://github.com/OctoPrint/OctoPrint-FirmwareCheck/archive/{target_version}.zip",
+            }
+        }
 
     ##~~ Helpers
 
@@ -220,18 +224,21 @@ class FirmwareCheckPlugin(
                         url = check.url
 
                     self._register_warning(
-                        warning_type, message.format(**check.placeholders), severity, url
+                        warning_type,
+                        message.format(**check.placeholders),
+                        severity,
+                        url,
                     )
 
                     # noinspection PyUnresolvedReferences
                     self._event_bus.fire(
                         Events.PLUGIN_FIRMWARE_CHECK_WARNING,
-                        dict(
-                            check_name=check.name,
-                            warning_type=warning_type,
-                            severity=severity,
-                            url=url,
-                        ),
+                        {
+                            "check_name": check.name,
+                            "warning_type": warning_type,
+                            "severity": severity,
+                            "url": url,
+                        },
                     )
                     changes = True
                     break
@@ -259,7 +266,11 @@ class FirmwareCheckPlugin(
                 url=url,
             )
         )
-        self._warnings[warning_type] = dict(message=message, severity=severity, url=url)
+        self._warnings[warning_type] = {
+            "message": message,
+            "severity": severity,
+            "url": url,
+        }
 
         logline = f"{message}. More information at {url}"
         if severity == Severity.INFO:
@@ -289,7 +300,7 @@ class FirmwareCheckPlugin(
             self._printer.log_lines(*lines)
 
     def _ping_clients(self):
-        self._plugin_manager.send_plugin_message(self._identifier, dict(type="update"))
+        self._plugin_manager.send_plugin_message(self._identifier, {"type": "update"})
 
 
 def register_custom_events(*args, **kwargs):

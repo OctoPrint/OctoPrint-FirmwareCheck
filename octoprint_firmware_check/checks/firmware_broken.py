@@ -10,20 +10,20 @@ from . import LineCheck, Severity
 class FirmwareBrokenChecks:
     @classmethod
     def as_dict(cls):
-        return dict(
-            checks=(
+        return {
+            "checks": (
                 CbdCheck(),
                 ZwlfCheck(),
                 CrealityDoubleTempCheck(),
                 CrealityTFCardCheck(),
             ),
-            message=gettext(
+            "message": gettext(
                 "Your printer's firmware is known to have a broken implementation of the "
                 "communication protocol. This may cause print failures or other annoyances. "
                 "You'll need to take additional steps for OctoPrint to fully work with it."
             ),
-            severity=Severity.WARNING,
-        )
+            "severity": Severity.WARNING,
+        }
 
 
 class CbdCheck(LineCheck):
@@ -87,8 +87,6 @@ class CrealityTFCardCheck(LineCheck):
         # first thing that looks like a proper report stops scanning
         lower_line = line.lower()
         return not settings().getBoolean(["feature", "sdSupport"]) or any(
-            map(
-                lambda x: x in lower_line,
-                ("sd card ok", "sd init fail", "sd printing byte", "not sd printing"),
-            )
+            x in lower_line
+            for x in ("sd card ok", "sd init fail", "sd printing byte", "not sd printing")
         )

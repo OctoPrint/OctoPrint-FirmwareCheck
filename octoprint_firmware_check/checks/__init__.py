@@ -142,7 +142,7 @@ class AuthorCheck(Check):
 
         lower_line = line.lower()
         if self.AUTHOR in lower_line:
-            self._triggered = any(map(lambda x: x in lower_line, self.authors))
+            self._triggered = any(x in lower_line for x in self.authors)
             self._active = False
 
 
