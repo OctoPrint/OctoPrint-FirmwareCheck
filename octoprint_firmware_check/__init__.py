@@ -110,6 +110,9 @@ class FirmwareCheckPlugin(
             return flask.make_response("Insufficient rights", 403)
         return flask.jsonify(self._warnings)
 
+    def is_api_protected(self):
+        return True
+
     ##~~ SettingsPlugin API
 
     def get_settings_defaults(self):
