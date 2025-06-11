@@ -1,11 +1,10 @@
 name: Build pipeline
 on:
   push:
-    branches:
-      - master
-      - devel
+  pull_request:
   release:
     types: [released]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: 🏗 Set up Python 3.10
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
       - name: 🏗 Install build dependencies
@@ -35,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: 🏗 Set up Python 3.10
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
       - name: 🏗 Set up pre-commit
@@ -45,18 +44,57 @@ jobs:
         run: |
           pre-commit run --all-files --show-diff-on-failure
 
+  test-install:
+    name: 🧪 Installation test
+    strategy:
+      matrix:
+        python: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+    runs-on: ubuntu-22.04 # change back to ubuntu-latest once we drop Python 3.7
+    steps:
+      - uses: actions/checkout@v4
+      - name: 🏗 Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 🚀 Set up test dependencies & run test install
+        run: |
+          pip install octoprint
+          pip install -e .[develop]
+
+  e2e:
+    name: 🧪 E2E tests
+    needs: build
+    runs-on: ubuntu-22.04 # change back to ubuntu-latest once we drop Python 3.7 & upgrade playwright
+    strategy:
+      matrix:
+        octoprint: ["master", "maintenance"]
+    steps:
+      - name: ⬇ Download build result
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: 🎭 Run OctoPrint's E2E Tests
+        uses: OctoPrint/actions/e2e@main
+        with:
+          ref: ${{ matrix.octoprint }}
+          deps: ${{ github.workspace }}/dist/*.whl
+          suffix: "-${{ matrix.octoprint }}"
+
   publish-on-testpypi:
     name: 📦 Publish on TestPyPI
     if: github.event_name == 'release'
     needs:
       - build
       - pre-commit
+      - e2e
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     environment:
       name: testpypi
       url: https://test.pypi.org/p/OctoPrint-FirmwareCheck
-    permissions:
-      id-token: write
     steps:
       - name: ⬇ Download build result
         uses: actions/download-artifact@v4
@@ -73,11 +111,11 @@ jobs:
     if: github.event_name == 'release'
     needs: publish-on-testpypi
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     environment:
       name: pypi
       url: https://pypi.org/p/OctoPrint-FirmwareCheck
-    permissions:
-      id-token: write
     steps:
       - name: ⬇ Download build result
         uses: actions/download-artifact@v4
