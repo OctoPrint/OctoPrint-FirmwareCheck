@@ -47,8 +47,9 @@ jobs:
   test-install:
     name: 🧪 Installation test
     strategy:
+      fail-fast: false
       matrix:
-        python: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+        python: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
     runs-on: ubuntu-22.04 # change back to ubuntu-latest once we drop Python 3.7
     steps:
       - uses: actions/checkout@v4
@@ -61,13 +62,20 @@ jobs:
           pip install octoprint
           pip install -e .[develop]
 
-  e2e:
+  test-e2e:
     name: 🧪 E2E tests
     needs: build
     runs-on: ubuntu-22.04 # change back to ubuntu-latest once we drop Python 3.7 & upgrade playwright
     strategy:
+      fail-fast: false
       matrix:
         octoprint: ["master", "maintenance"]
+        python: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        exclude:
+          - octoprint: "maintenance"
+            python: "3.7"
+          - octoprint: "maintenance"
+            python: "3.8"
     steps:
       - name: ⬇ Download build result
         uses: actions/download-artifact@v4
@@ -79,8 +87,9 @@ jobs:
         uses: OctoPrint/actions/e2e@main
         with:
           ref: ${{ matrix.octoprint }}
+          python: ${{ matrix.python }}
           deps: ${{ github.workspace }}/dist/*.whl
-          suffix: "-${{ matrix.octoprint }}"
+          suffix: "-${{ matrix.octoprint }}-py${{ matrix.python }}"
 
   publish-on-testpypi:
     name: 📦 Publish on TestPyPI
@@ -88,7 +97,8 @@ jobs:
     needs:
       - build
       - pre-commit
-      - e2e
+      - test-install
+      - test-e2e
     runs-on: ubuntu-latest
     permissions:
       id-token: write
