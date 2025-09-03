@@ -13,14 +13,14 @@ is detected. This kind of message can be disabled.
 
 It was formerly called "Printer Safety Check" and used to be bundled with OctoPrint since version
 1.3.7. It was unbundled in 1.4.1 and turned into an install dependency to allow for a separate release cycle. It is
-still considered a core plugin of OctoPrint, treated as if bundled and thus also active in [safe mode](https://docs.octoprint.org/en/master/features/safemode.html).
+still considered a core plugin of OctoPrint, treated as if bundled and thus also active in [safe mode](https://docs.octoprint.org/en/main/features/safemode.html).
 
 ## Setup
 
 The plugin is part of the core dependencies of OctoPrint 1.4.1+ and will be installed automatically alongside it.
 
 In case you want to manually install it into an older version for whatever reason, install via the bundled
-[Plugin Manager](https://docs.octoprint.org/en/master/bundledplugins/pluginmanager.html)
+[Plugin Manager](https://docs.octoprint.org/en/main/bundledplugins/pluginmanager.html)
 or manually using this URL:
 
     https://github.com/OctoPrint/OctoPrint-FirmwareCheck/archive/master.zip
