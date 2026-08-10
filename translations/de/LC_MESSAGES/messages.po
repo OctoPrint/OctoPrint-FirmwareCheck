@@ -154,4 +154,4 @@ msgstr ""
 
 #: octoprint_firmware_check/templates/firmware_check_sidebar_info.jinja2:10
 msgid "Disable firmware checks of severity \"Info\""
-msgstr "Deaktivere Firmware Checks der Schwere \"Info\""
+msgstr "Deaktiviere Firmware-Checks der Schwere \"Info\""
