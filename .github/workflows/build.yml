@@ -81,7 +81,7 @@ jobs:
             python: "3.9"
     steps:
       - name: ⬇ Download build result
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist
@@ -110,7 +110,7 @@ jobs:
       url: https://test.pypi.org/p/OctoPrint-FirmwareCheck
     steps:
       - name: ⬇ Download build result
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist
@@ -135,7 +135,7 @@ jobs:
       url: https://pypi.org/p/OctoPrint-FirmwareCheck
     steps:
       - name: ⬇ Download build result
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist
